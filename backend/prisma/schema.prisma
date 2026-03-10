@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(cuid())
+  email     String     @unique
+  username  String     @unique
+  password  String
+  avatar    String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  
+  // Relations
+  hostedGames  Game[]         @relation("HostedGames")
+  gamePlayers  GamePlayer[]   @relation("UserGamePlayers")
+  statistics   GameStatistic?
+}
+
+model Game {
+  id               String   @id @default(cuid())
+  code             String   @unique
+  name             String
+  
+  // Host relation
+  host             User     @relation("HostedGames", fields: [hostId], references: [id], onDelete: Cascade)
+  hostId           String
+  
+  // Players in this game
+  players          GamePlayer[] @relation("GamePlayers")
+  
+  maxPlayers       Int      @default(10)
+  minPlayers       Int      @default(2)
+  isPublic         Boolean  @default(true)
+  status           String @default("WAITING") // GameStatus: WAITING, IN_PROGRESS, PAUSED, FINISHED
+  
+  currentPlayerIndex Int @default(0)
+  direction        String @default("clockwise") // Direction: clockwise, counterclockwise
+  deck             String? // JSON serialized
+  discardPile      String? // JSON serialized
+  gameState        String? // JSON serialized full state
+  
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  startedAt        DateTime?
+  endedAt          DateTime?
+  
+  // Winner (optional, one-to-one)
+  winnerId         String?  @unique
+  winner           GamePlayer? @relation("GameWinner", fields: [winnerId], references: [id], onDelete: SetNull)
+}
+
+model GamePlayer {
+  id        String   @id @default(cuid())
+  
+  // Game relation
+  game      Game     @relation("GamePlayers", fields: [gameId], references: [id], onDelete: Cascade)
+  gameId    String
+  
+  // User relation
+  user      User     @relation("UserGamePlayers", fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  
+  // Winner relation (back reference to Game.winner)
+  winnerOfGame Game? @relation("GameWinner")
+  
+  // Game data
+  hand      String   // JSON serialized card array
+  position  Int
+  hasSaidUno Boolean @default(false)
+  cardsCount Int @default(7)
+  score     Int @default(0)
+  
+  createdAt DateTime @default(now())
+  
+  @@unique([gameId, userId])
+  @@unique([gameId, position])
+}
+
+model GameStatistic {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+  
+  totalGames Int @default(0)
+  wins       Int @default(0)
+  losses     Int @default(0)
+  winRate    Float @default(0)
+  
+  updatedAt DateTime @updatedAt
+}
+
+// Enums converted to String for SQLite compatibility
+// GameStatus values: WAITING, IN_PROGRESS, PAUSED, FINISHED
+// Direction values: clockwise, counterclockwise

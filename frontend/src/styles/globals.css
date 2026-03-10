@@ -1,0 +1,211 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply box-border;
+}
+
+html,
+body {
+  @apply h-full w-full;
+  @apply bg-gradient-to-br from-slate-900 to-slate-800;
+  @apply text-gray-100;
+  @apply font-sans;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  @apply overflow-x-hidden;
+}
+
+a {
+  @apply text-blue-400 hover:text-blue-300 transition-colors;
+  text-decoration: none;
+}
+
+button {
+  @apply cursor-pointer transition-all;
+}
+
+/* Card styling */
+.uno-card {
+  @apply rounded-lg shadow-lg transition-all duration-300 select-none;
+  @apply hover:scale-110 hover:shadow-2xl;
+  @apply active:scale-95;
+  aspect-ratio: 2 / 3;
+}
+
+.uno-card.red {
+  @apply bg-card-red;
+}
+
+.uno-card.blue {
+  @apply bg-card-blue;
+}
+
+.uno-card.green {
+  @apply bg-card-green;
+}
+
+.uno-card.yellow {
+  @apply bg-card-yellow text-gray-900;
+}
+
+.uno-card.wild {
+  @apply bg-gradient-to-br from-card-wild via-purple-600 to-pink-600;
+}
+
+/* Game board */
+.game-board {
+  @apply relative w-full h-screen;
+  @apply flex flex-col items-center justify-center;
+}
+
+.discard-pile {
+  @apply relative w-24 h-32;
+  @apply flex items-center justify-center;
+  perspective: 1000px;
+}
+
+.draw-pile {
+  @apply relative w-24 h-32;
+  @apply flex items-center justify-center border-2 border-dashed border-gray-400;
+  @apply rounded-lg;
+}
+
+/* Player areas */
+.player-area {
+  @apply absolute rounded-lg p-4;
+  @apply bg-black bg-opacity-30 border border-gray-600;
+  @apply min-w-max;
+}
+
+.player-hand {
+  @apply flex gap-2 justify-center items-center;
+  @apply flex-wrap;
+  @apply max-w-4xl;
+}
+
+/* Buttons */
+.btn {
+  @apply px-6 py-3 rounded-lg font-semibold;
+  @apply transition-all duration-200;
+  @apply focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn-primary {
+  @apply bg-blue-600 hover:bg-blue-700 text-white;
+  @apply focus:ring-blue-500;
+}
+
+.btn-secondary {
+  @apply bg-gray-600 hover:bg-gray-700 text-white;
+  @apply focus:ring-gray-500;
+}
+
+.btn-danger {
+  @apply bg-red-600 hover:bg-red-700 text-white;
+  @apply focus:ring-red-500;
+}
+
+.btn-success {
+  @apply bg-green-600 hover:bg-green-700 text-white;
+  @apply focus:ring-green-500;
+}
+
+/* Forms */
+.form-input {
+  @apply w-full px-4 py-2 rounded-lg;
+  @apply bg-gray-800 text-white;
+  @apply border border-gray-700 focus:border-blue-500;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500;
+  @apply transition-colors;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-gray-300 mb-2;
+}
+
+/* Modal */
+.modal {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center;
+  @apply z-50;
+}
+
+.modal-content {
+  @apply bg-gray-900 rounded-lg p-8 max-w-md w-full;
+  @apply border border-gray-700;
+  @apply shadow-2xl;
+}
+
+/* Loading spinner */
+.spinner {
+  @apply inline-block animate-spin;
+}
+
+.spinner-small {
+  @apply w-4 h-4;
+}
+
+.spinner-medium {
+  @apply w-8 h-8;
+}
+
+.spinner-large {
+  @apply w-12 h-12;
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Animations */
+@keyframes slideIn {
+  from {
+    @apply opacity-0 -translate-x-full;
+  }
+  to {
+    @apply opacity-100 translate-x-0;
+  }
+}
+
+@keyframes slideOut {
+  from {
+    @apply opacity-100 translate-x-0;
+  }
+  to {
+    @apply opacity-0 translate-x-full;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    @apply opacity-0;
+  }
+  to {
+    @apply opacity-100;
+  }
+}
+
+.animate-slideIn {
+  @apply animate-[slideIn_0.3s_ease-out];
+}
+
+.animate-slideOut {
+  @apply animate-[slideOut_0.3s_ease-in];
+}
+
+.animate-fadeIn {
+  @apply animate-[fadeIn_0.3s_ease-out];
+}
